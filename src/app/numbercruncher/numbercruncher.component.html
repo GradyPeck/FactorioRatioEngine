@@ -1,0 +1,26 @@
+<!-- <p>numbercruncher works!</p>
+<form action="Submit">
+    <input type="file" name="hwank" [(ngModel)]="honk" observeFiles multiple>
+    <p>{{honk}}</p>
+    <input type="button" (click)="parsley()">
+</form> -->
+
+<form (submit)="processForm()">
+    <div class="field">
+        <label>Name:</label>
+        <input type="text" name="name" [(ngModel)]="form.name" />
+    </div>
+    <div class="field">
+        <label>Email:</label>
+        <input type="text" name="email" [(ngModel)]="form.email" />
+    </div>
+    <div class="field">
+        <label>Resume:</label>
+        <input type="file" name="resume" [(ngModel)]="form.resume" observeFiles />
+    </div>
+    <div class="actions">
+        <button type="submit">
+            Process Form
+        </button>
+    </div>
+</form>
