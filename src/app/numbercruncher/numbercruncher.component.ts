@@ -5,9 +5,14 @@ import { NgxCSVParserError } from 'ngx-csv-parser';
 
 interface IRecipe {
   name : string;
-  ingredients : string;
-  products : string;
-  data : string;
+  ingredients : Object;
+  products : Object;
+  data : Object;
+}
+
+interface IResource {
+  name : string;
+  data : Object;
 }
 
 @Component({
@@ -19,12 +24,12 @@ interface IRecipe {
 export class NumbercruncherComponent implements OnInit {
 
   public form: {
-		resume: File | null;
+		fileIn: File | null;
 	};
 
   constructor(private csvparser : NgxCsvParser) { 
     this.form = {
-			resume: null
+			fileIn: null
 		};
   }
 
@@ -34,24 +39,34 @@ export class NumbercruncherComponent implements OnInit {
   csvRecords = [];
 
   recipes : IRecipe[] = [];
+  resources : IResource[] = [];
 
   parsley (inpoot : File) {
     this.csvparser.parse(inpoot, { header: false, delimiter: '@' })
-      .pipe().subscribe((result: Array<any>) => {
- 
+      .pipe().subscribe((result: Array<string[]>) => {
         //console.log('Result', result);
         this.csvRecords = result;
+        let newRow = [];
         for (let row of this.csvRecords) {
-           this.recipes.push({'name' : row[0], 'ingredients' : row[1], 'products' : row[2], 'data' : row[3]});
+          newRow = [];
+          for (let item of row) {
+            item = item.replace(/'/g, '"');
+            newRow.push(item);
+          }
+          if (row[1] != "No Ingredients") {
+            this.recipes.push({name : newRow[0], ingredients : JSON.parse(newRow[1]), products : JSON.parse(newRow[2]), data : JSON.parse(newRow[3])});
+          }
+          else {
+            this.resources.push({name: newRow[0], data: JSON.parse(newRow[3])});
+          }
         }
       }, (error: NgxCSVParserError) => {
         console.log('Error', error);
       });
-      
     }
 
     public processForm() : void {
-      this.parsley(this.form.resume);
+      this.parsley(this.form.fileIn);
     }
   
 }

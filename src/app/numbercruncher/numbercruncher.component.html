@@ -1,14 +1,7 @@
-<!-- <p>numbercruncher works!</p>
-<form action="Submit">
-    <input type="file" name="hwank" [(ngModel)]="honk" observeFiles multiple>
-    <p>{{honk}}</p>
-    <input type="button" (click)="parsley()">
-</form> -->
-
 <form (submit)="processForm()">
     <div class="field">
         <label>CSV:</label>
-        <input type="file" name="resume" [(ngModel)]="form.resume" observeFiles />
+        <input type="file" name="fileIn" [(ngModel)]="form.fileIn" observeFiles />
     </div>
     <div class="actions">
         <button type="submit">
@@ -16,5 +9,3 @@
         </button>
     </div>
 </form>
-
-<p *ngFor="let recipe of recipes">{{recipe.ingredients}}</p>
