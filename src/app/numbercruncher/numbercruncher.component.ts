@@ -49,17 +49,35 @@ export class NumbercruncherComponent implements OnInit {
         let newRow = [];
         for (let row of this.csvRecords) {
           newRow = [];
+          //turn all single quotes to double quotes for JSON format, then parse data
           for (let item of row) {
             item = item.replace(/'/g, '"');
             newRow.push(item);
           }
+          newRow[3] = JSON.parse(newRow[3]);
+          //if not a resource, parse ingredients and products, cast numbers, then push to recipes
           if (row[1] != "No Ingredients") {
-            this.recipes.push({name : newRow[0], ingredients : JSON.parse(newRow[1]), products : JSON.parse(newRow[2]), data : JSON.parse(newRow[3])});
+            newRow[1] = JSON.parse(newRow[1]);
+            for (let key in newRow[1]) {
+              newRow[1][key] = Number(newRow[1][key]);
+            }
+            newRow[2] = JSON.parse(newRow[2]);
+            for (let key in newRow[2]) {
+              newRow[2][key] = Number(newRow[2][key]);
+            }
+            this.recipes.push({name : newRow[0], ingredients : newRow[1], products : newRow[2], data : newRow[3]});
           }
+          //push resources to resources
           else {
-            this.resources.push({name: newRow[0], data: JSON.parse(newRow[3])});
+            this.resources.push({name: newRow[0], data: newRow[3]});
           }
+          /* testing stuff
+          for (let key in this.recipes[this.recipes.length-1].ingredients) {
+            console.log(key + ": " + this.recipes[this.recipes.length-1].ingredients[key]);
+          }*/
         }
+        //manually add oil processing...
+        this.recipes.push({name: "Advanced Oil Processing", ingredients : {"Time" : 5, "Crude oil" : 100, "Water" : 50}, products : {"Heavy oil" : 25, "Light oil" : 45, "Petroleum gas" : 55}, data : {"Produced by" : "Oil refinery"}});
       }, (error: NgxCSVParserError) => {
         console.log('Error', error);
       });
