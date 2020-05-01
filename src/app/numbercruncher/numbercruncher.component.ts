@@ -48,7 +48,9 @@ export class NumbercruncherComponent implements OnInit {
   resources : IResource[] = [];
 
   selection : string;
-  viewedRecipe : string = "";
+  selectAmount : number;
+  
+  crunchResult : denseIng[] = [];
 
   parsley (inpoot : File) {
     //reset everything in case this isn't the first time
@@ -94,15 +96,20 @@ export class NumbercruncherComponent implements OnInit {
           }
         }
         //manually add oil processing...
-        //this.recipes.push({name: "Advanced Oil Processing", ingredients : {"Time" : 5, "Crude oil" : 100, "Water" : 50}, products : {"Heavy oil" : 25, "Light oil" : 45, "Petroleum gas" : 55}, data : {"Produced by" : "Oil refinery"}});
+        this.recipes.push({name: "Advanced Oil Processing", ingredients : {"Crude oil" : 100, "Water" : 50}, products : {"Heavy oil" : 25, "Light oil" : 45, "Petroleum gas" : 55}, data : {"Produced by" : "Oil refinery"}, time: 5});
         //and some resources
         this.resources.push({name : "Wood", data : {}});
         this.resources.push({name : "Time", data : {}});
+        this.recipes.push({name: "Iron ore", ingredients: {}, products: {"Iron ore": 1}, data: {}, time: 2});
+        this.recipes.push({name: "Copper ore", ingredients: {}, products: {"Copper ore": 1}, data: {}, time: 2});
+        this.recipes.push({name: "Coal", ingredients: {}, products: {"Coal": 1}, data: {}, time: 2});
+        this.recipes.push({name: "Stone", ingredients: {}, products: {"Stone": 1}, data: {}, time: 2});
       }, (error: NgxCSVParserError) => {
         console.log('Error', error);
       });
     }
 
+    //for debugging - currently unused
     public printRecipes () {
       for (let recipe of this.recipes) {
         console.log(recipe.name);
@@ -115,63 +122,20 @@ export class NumbercruncherComponent implements OnInit {
       }
     }
 
-    /*
-    public searchRecipe (selecty : string, demandRate : number) : IRecipe {
-      for (let recipe of this.recipes) {
-        for (let prod in recipe.products) {
-          if (prod.toUpperCase() === selecty.toUpperCase()) {
-            //find the amount of the item this recipe produces per second
-            let prodRate : number = recipe.products[prod] / recipe.time;
-
-            //convert to number of machines needed to meet given demand
-            prodRate = demandRate / prodRate;
-            // console.log(recipe.name + ": " + prodRate);
-
-            //stuff below here currently makes no goddamn sense
-            //lesson learned: whiteboard, THEN code
-
-            //add ingredients to total ingredient list multiplied by that number
-            let multIngredients : IRecipe = recipe;
-            for (let ingredient in multIngredients.ingredients) {
-              multIngredients.ingredients[ingredient] = prodRate;
-            }
-            for (let mult in multIngredients.ingredients) {
-             // console.log(mult + ": " + multIngredients.ingredients[mult]);
-            }
-            return multIngredients;
-          }
-        }
-      }
-      //console.log("search for " + selecty + " returning null");
-      return null;
-    }
-
-    public recurseRecipe (recipe : IRecipe) : denseIng[] {
-      if (recipe === null) {return [];}
-      let totalIgrees : denseIng[] = [];
-      for (let ingy in recipe.ingredients) {
-        let demandRate : number = recipe.ingredients[ingy] / recipe.time;
-        totalIgrees = [...totalIgrees, ...this.recurseRecipe(this.searchRecipe(ingy, demandRate)), {name: ingy, quantity: recipe.ingredients[ingy]}];
-      }
-      return totalIgrees;
-    }
-    */
-
     public searchRecipe (selecty : string) : IRecipe {
       for (let recipe of this.recipes) {
         for (let prod in recipe.products) {
           if (prod.toUpperCase() === selecty.toUpperCase()) {
-            console.log("found " + prod);
             return recipe;
           }
         }
       }
-      //console.log("search for " + selecty + " returning null");
       return null;
     }
 
     public recurseRecipe (recipe : IRecipe, dRate : number) : denseIng[] {
       if (recipe === null) {
+        //this shouldn't happen anymore. If it does you probably have no data loaded. 
         console.log("nullreturn");
         return [];
       }
@@ -181,20 +145,61 @@ export class NumbercruncherComponent implements OnInit {
         let demandRate : number = recipe.ingredients[ingy];
         //multiply by the overall demand to get TRUE demandRate
         demandRate = demandRate*dRate;
-        totalIngrees.push({name: ingy, quantity: demandRate});
-        totalIngrees.push(...this.recurseRecipe(this.searchRecipe(ingy), demandRate));
+        let ingyRecipe : IRecipe = this.searchRecipe(ingy);
+        if(ingyRecipe != null) {
+          //divide the demandRate over the batch size
+          demandRate = demandRate/ingyRecipe.products[ingy];
+          //demandRate is multiplied by time to yield number of machines
+          totalIngrees.push({name: ingy, quantity: demandRate * ingyRecipe.time});
+          //cue up the next layer
+          totalIngrees.push(...this.recurseRecipe(ingyRecipe, demandRate));
+        }
+        else {
+          //catch raw resources and broken things
+          totalIngrees.push({name: ingy, quantity: demandRate});
+        }
       }
-      //console.log(totalIngrees);
       return totalIngrees;
     }
 
     public firstDomino (searchTerm : string) {
-      console.log("first domino falls");
-      let ary : denseIng[] = this.recurseRecipe(this.searchRecipe(searchTerm), 1);
-      console.log(searchTerm + ": " + 1);
-      for (let thingy of ary) {
-        console.log(thingy.name + ": " + thingy.quantity);
+      //obnoxiously extract the correct form of the search term so I can use it in the next step
+      let topRecipe = this.searchRecipe(searchTerm);
+      for (let product in topRecipe.products) {
+        if (product.toUpperCase() == searchTerm.toUpperCase()) {
+          searchTerm = product;
+        }
       }
+      //kick off the recursion with a fake recipe so the top layer gets included in the results
+      let ary : denseIng[] = this.recurseRecipe({name: "fake", ingredients: {[searchTerm]: 1}, products: {}, data: {}, time: 1}, this.selectAmount);
+
+      //#region ObjectConsolidation
+      /* object-based result consolidation (Bring back if you want an ary object)
+      consolidate results
+      let newAry = {};
+      for (let thingy of ary) {
+        if(newAry[thingy.name] == undefined) {
+          newAry[thingy.name] = thingy.quantity;
+        }
+        else {
+          newAry[thingy.name] = newAry[thingy.name] + thingy.quantity;
+        }
+      }*/
+      //#endregion
+      //consolidate results
+      for (let i = 0; i < ary.length; i++) {
+        for (let z = i + 1; z < ary.length; z++) {
+          if (ary[i].name == ary[z].name) {
+            //add result b to result a
+            ary[i].quantity = ary[i].quantity + ary[z].quantity;
+            //remove result b
+            ary.splice(z, 1);
+            //back up the index to avoid skipping
+            z--;
+          }
+        }
+      }
+      this.crunchResult = ary;
     }
 
     public processForm() : void {

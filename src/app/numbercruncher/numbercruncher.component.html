@@ -12,4 +12,7 @@
 
 <p *ngIf="recipes.length">{{recipes.length}} recipes successfully loaded</p>
 <input type="text" [(ngModel)]="selection">
+<input type="number" [(ngModel)]="selectAmount">
 <input type="button" (click)="firstDomino(selection)">
+
+<p *ngFor="let item of crunchResult">{{item.name}} : {{item.quantity}}</p>
