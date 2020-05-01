@@ -10,6 +10,6 @@
     </div>
 </form>
 
-<div *ngFor="let recipe of recipes">
-    
-</div>
+<p *ngIf="recipes.length">{{recipes.length}} recipes successfully loaded</p>
+<input type="text" [(ngModel)]="selection">
+<input type="button" (click)="firstDomino(selection)">
