@@ -1,0 +1,15 @@
+<p>csvloader works!</p>
+
+<form (submit)="processForm()">
+    <div class="field">
+        <label>CSV:</label>
+        <input type="file" name="fileIn" [(ngModel)]="form.fileIn" observeFiles />
+    </div>
+    <div class="actions">
+        <button type="submit">
+            Parse!
+        </button>
+    </div>
+</form>
+
+<p *ngIf="recipeBank.recipes.length">{{recipeBank.recipes.length}} recipes successfully loaded</p>

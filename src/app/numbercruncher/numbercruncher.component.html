@@ -1,18 +1,22 @@
-<form (submit)="processForm()">
-    <div class="field">
-        <label>CSV:</label>
-        <input type="file" name="fileIn" [(ngModel)]="form.fileIn" observeFiles />
-    </div>
-    <div class="actions">
-        <button type="submit">
-            Parse!
-        </button>
-    </div>
-</form>
+<app-csvloader></app-csvloader>
 
-<p *ngIf="recipes.length">{{recipes.length}} recipes successfully loaded</p>
 <input type="text" [(ngModel)]="selection">
-<input type="number" [(ngModel)]="selectAmount">
-<input type="button" (click)="firstDomino(selection)">
+<input type="number" [(ngModel)]="selectAmount" value="1">
+<button (click)="firstDomino(selection)">BUTTON</button>
+<br>
+<label for="assemblyChoice">Assembly Machine
+    <input type="range" min="1" max="3" value="2" name="assemblyChoice" [(ngModel)]="assemblyChoice">
+</label>
+<span>{{assemblyChoice}}</span>
+<br>
+<label for="furnaceChoice">Furnace
+    <input type="range" min="1" max="2" value="2" name="furnaceChoice" [(ngModel)]="furnaceChoice">
+</label>
+<span>{{furnaceChoice}}</span>
+<br>
+<label for="drillChoice">Mining Drill
+    <input type="range" min="1" max="2" value="2" name="drillChoice" [(ngModel)]="drillChoice">
+</label>
+<span>{{drillChoice}}</span>
 
 <p *ngFor="let item of crunchResult">{{item.name}} : {{item.quantity}}</p>

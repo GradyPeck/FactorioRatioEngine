@@ -7,13 +7,15 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NumbercruncherComponent } from './numbercruncher/numbercruncher.component';
-import { FileInputValueAccessor } from './FileInputValueAccessor'
+import { FileInputValueAccessor } from './FileInputValueAccessor';
+import { CsvloaderComponent } from './csvloader/csvloader.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     NumbercruncherComponent,
-    FileInputValueAccessor
+    FileInputValueAccessor,
+    CsvloaderComponent
   ],
   imports: [
     BrowserModule,
