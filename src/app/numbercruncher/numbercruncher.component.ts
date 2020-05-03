@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NgxCsvParser } from 'ngx-csv-parser';
-import { NgxCSVParserError } from 'ngx-csv-parser';
 import { RecipebankService } from '../recipebank.service';
 import { IRecipe } from '../recipebank.service';
 import { denseIng } from '../recipebank.service';
@@ -17,10 +15,12 @@ export class NumbercruncherComponent implements OnInit {
   constructor(private recipeBank : RecipebankService) { }
 
   ngOnInit() {
+    this.chooseMachines();
   }
 
-  selection : string;
-  selectAmount : number;
+  selection : string = "";
+  selectAmount : number = 1;
+
   assemblyChoice : number = 2;
   furnaceChoice : number = 2;
   drillChoice : number = 2;

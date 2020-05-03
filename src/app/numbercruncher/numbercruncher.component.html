@@ -1,8 +1,12 @@
-<app-csvloader></app-csvloader>
+<h1 *ngIf="recipeBank.recipes.length < 1">NO CSV LOADED</h1>
 
-<input type="text" [(ngModel)]="selection">
+<p>Select final product and number to create per second:</p>
+<input type="text" [(ngModel)]="selection" value="">
 <input type="number" [(ngModel)]="selectAmount" value="1">
-<button (click)="firstDomino(selection)">BUTTON</button>
+<span *ngIf="searchRecipe(selection) != undefined">For one machine, choose {{getCraftSpeed(searchRecipe(selection))/searchRecipe(selection).time}}</span>
+<br>
+<button (click)="firstDomino(selection)">Calculate!</button>
+
 <br>
 <label for="assemblyChoice">Assembly Machine
     <input type="range" min="1" max="3" value="2" name="assemblyChoice" [(ngModel)]="assemblyChoice">
