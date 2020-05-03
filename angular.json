@@ -118,8 +118,13 @@
               "devServerTarget": "FactorioRatioEngine:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
-    }},
+    }
+  },
   "defaultProject": "FactorioRatioEngine"
 }

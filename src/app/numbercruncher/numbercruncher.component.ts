@@ -12,7 +12,7 @@ import { denseIng } from '../recipebank.service';
 
 export class NumbercruncherComponent implements OnInit {
 
-  constructor(private recipeBank : RecipebankService) { }
+  constructor(public recipeBank : RecipebankService) { }
 
   ngOnInit() {
     this.chooseMachines();

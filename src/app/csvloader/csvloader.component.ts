@@ -17,7 +17,7 @@ export class CsvloaderComponent implements OnInit {
 		fileIn: File | null;
 	};
 
-  constructor(private csvparser : NgxCsvParser, private recipeBank : RecipebankService) { 
+  constructor(private csvparser : NgxCsvParser, public recipeBank : RecipebankService) { 
     this.form = {
 			fileIn: null
 		};

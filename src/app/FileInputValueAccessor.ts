@@ -39,7 +39,7 @@ export class FileInputValueAccessor implements ControlValueAccessor {
  
 	private elementRef: ElementRef;
 	private onChangeCallback: Function;
-	private onTouchedCallback: Function;
+	public onTouchedCallback: Function;
  
 	// I initialize the file-input value accessor service.
 	constructor( elementRef: ElementRef ) {
