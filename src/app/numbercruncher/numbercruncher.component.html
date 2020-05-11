@@ -1,9 +1,24 @@
 <h1 *ngIf="recipeBank.recipes.length < 1">NO CSV LOADED</h1>
 
+<div *ngIf="selection && searchRecipe(selection) == undefined" id="searchResults">
+    <button *ngFor="let match of recipeBank.recipes | myFilter : selection" (click)="selection=match">{{match}}</button>
+</div>
+
 <p>Select final product and number to create per second:</p>
-<input type="text" [(ngModel)]="selection" value="">
-<input type="number" [(ngModel)]="selectAmount" value="1">
-<span *ngIf="searchRecipe(selection) != undefined">For one machine, choose {{getCraftSpeed(searchRecipe(selection))/searchRecipe(selection).time}}</span>
+
+<label>Final Product: 
+    <input type="text" [(ngModel)]="selection" value="">
+</label>
+
+<label>Desired Items/Second: 
+    <input type="number" [(ngModel)]="selectAmountItems" (input)="EqualizeInputs('I')">
+</label>
+
+<label>Desired Machines to Occupy: 
+    <input type="number" [(ngModel)]="selectAmountMachines" (input)="EqualizeInputs('M')">
+</label>
+
+<!-- <span *ngIf="searchRecipe(selection) != undefined">For one machine, choose {{(getCraftSpeed(searchRecipe(selection))*searchRecipe(selection).products[selection])/searchRecipe(selection).time}}</span> -->
 <br>
 <button (click)="firstDomino(selection)">Calculate!</button>
 
@@ -23,4 +38,6 @@
 </label>
 <span>{{drillChoice}}</span>
 
-<p *ngFor="let item of crunchResult">{{item.name}} : {{item.quantity}}</p>
+<p *ngFor="let item of crunchResult">{{item.name}} : {{this.fractionalize(item.quantity)}}</p>
+
+

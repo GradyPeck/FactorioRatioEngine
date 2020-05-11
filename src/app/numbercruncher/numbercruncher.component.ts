@@ -19,7 +19,8 @@ export class NumbercruncherComponent implements OnInit {
   }
 
   selection : string = "";
-  selectAmount : number = 1;
+  selectAmountItems : number;
+  selectAmountMachines : number;
 
   assemblyChoice : number = 2;
   furnaceChoice : number = 2;
@@ -90,7 +91,7 @@ export class NumbercruncherComponent implements OnInit {
       }
     }
     //kick off the recursion with a fake recipe so the top layer gets included in the results
-    let ary : denseIng[] = this.recurseRecipe({name: "fake", ingredients: {[searchTerm]: 1}, products: {}, data: {}, time: 1}, this.selectAmount);
+    let ary : denseIng[] = this.recurseRecipe({name: "fake", ingredients: {[searchTerm]: 1}, products: {}, data: {}, time: 1}, this.selectAmountItems);
 
     //#region ObjectConsolidation
     /* object-based result consolidation (Bring back if you want an ary object)
@@ -117,6 +118,10 @@ export class NumbercruncherComponent implements OnInit {
           z--;
         }
       }
+    }
+    //round everything to the nearest meaningful place to fix floating point errors   
+    for (let item of ary) {
+      item.quantity = this.fixFloat(item.quantity);
     }
     this.crunchResult = ary;
   }
@@ -173,6 +178,61 @@ export class NumbercruncherComponent implements OnInit {
       case 2: 
         this.chosenMachines["Electric mining drill"] = 2;
         break;
+    }
+  }
+
+  //round floats that differ from a shorter decimal by a very small amount (ie, errors)
+  public fixFloat (toFix : number) : number {
+    for (let places = 1; places < 5; places++) {
+      let fewPlaces = (Math.round(toFix*10**places))/(10**places);
+      //Rounds out differences lesser than the threshold value set in isClose
+      if (this.isClose(toFix, fewPlaces)) {
+        console.log(`${fewPlaces} : ${toFix} @ ${places}`);
+        return fewPlaces;
+      }
+    }
+    return toFix;
+  }
+
+  //convert simple fractions to mixed number form - for display only
+  public fractionalize (toFix : number) : string {
+    let leftSide = Math.trunc(toFix);
+    for (let i = 2; i <= 1000; i++) {
+      for (let z = 1; z <= 999; z++) {
+        if(z >= i) {break;}
+        if (this.isClose(toFix - leftSide, z/i)) {
+          if (leftSide == 0) {
+            return `${z}/${i}`;
+          }
+          else {
+            return `${leftSide} + ${z}/${i}`;
+          }
+        }
+      }
+    }
+    return String(toFix);
+  }
+
+  //this function largely exists so I can automatically use the same arbitrary threshold consistently
+  public isClose (num1 : number, num2 : number) : boolean {
+    //threshold is the arbitrary number of significant digits to check
+    let threshold : number = 0.0000001;
+    if (Math.abs(num1 - num2) < threshold) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public EqualizeInputs (modi : string) {
+    let inQuestion = this.searchRecipe(this.selection);
+    if (inQuestion == null) {return;}
+    if (modi == 'I') {
+      this.selectAmountMachines = this.selectAmountItems/((this.getCraftSpeed(inQuestion)*inQuestion.products[this.selection])/inQuestion.time);
+    }
+    else if (modi == 'M') {
+      this.selectAmountItems = this.selectAmountMachines*((this.getCraftSpeed(inQuestion)*inQuestion.products[this.selection])/inQuestion.time);
     }
   }
 

@@ -8,14 +8,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NumbercruncherComponent } from './numbercruncher/numbercruncher.component';
 import { FileInputValueAccessor } from './FileInputValueAccessor';
-import { CsvloaderComponent } from './csvloader/csvloader.component'
+import { CsvloaderComponent } from './csvloader/csvloader.component';
+import { MyFilterPipe } from './my-filter.pipe'
 
 @NgModule({
   declarations: [
     AppComponent,
     NumbercruncherComponent,
     FileInputValueAccessor,
-    CsvloaderComponent
+    CsvloaderComponent,
+    MyFilterPipe
   ],
   imports: [
     BrowserModule,
