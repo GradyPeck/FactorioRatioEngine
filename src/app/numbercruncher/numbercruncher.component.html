@@ -24,17 +24,9 @@
 </div>
 
 <!-- Search Results -->
-<!-- <div *ngIf="selection && searchRecipe(selection) == undefined" id="searchResults">
-    <button *ngFor="let match of recipeBank.recipes | myFilter : selection" (click)="selection=match">{{match}}</button>
-</div> -->
-
-<!-- <div *ngIf="condition; else elseBlock">Content to render when condition is true.</div>
-<ng-template #elseBlock>Content to render when condition is false.</ng-template> -->
-
 <div *ngIf="selection && searchRecipe(selection) == undefined" id=searchResults>
     <div *ngFor="let match of filterRecipes(selection); let i=index">
         <button style="background-color:red;" *ngIf="i == selectedResult; else elseBlock"  (click)="selection=match">{{match}}
-            <!-- <span *ngIf="i == selectedResult">THIS ONE</span> -->
         </button>
         <ng-template #elseBlock>
             <button (click)="selection=match">{{match}}</button>
