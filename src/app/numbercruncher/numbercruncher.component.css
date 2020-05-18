@@ -3,3 +3,17 @@
     flex-direction: column;
     float: right;
 }
+
+#amountSelectors {
+    display: flex;
+    flex-direction: column;
+}
+
+#removeButton {
+    float: right;
+    position: absolute;
+    left: 361px;
+    top: 60px;
+    height: 30px;
+    width: 30px;
+}

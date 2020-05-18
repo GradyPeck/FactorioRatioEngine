@@ -9,7 +9,8 @@ import { AppComponent } from './app.component';
 import { NumbercruncherComponent } from './numbercruncher/numbercruncher.component';
 import { FileInputValueAccessor } from './FileInputValueAccessor';
 import { CsvloaderComponent } from './csvloader/csvloader.component';
-import { MyFilterPipe } from './my-filter.pipe'
+import { MyFilterPipe } from './my-filter.pipe';
+import { CruncherframeComponent } from './cruncherframe/cruncherframe.component'
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MyFilterPipe } from './my-filter.pipe'
     NumbercruncherComponent,
     FileInputValueAccessor,
     CsvloaderComponent,
-    MyFilterPipe
+    MyFilterPipe,
+    CruncherframeComponent
   ],
   imports: [
     BrowserModule,

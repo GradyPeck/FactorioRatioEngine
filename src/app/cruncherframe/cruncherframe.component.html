@@ -1,0 +1,13 @@
+<div id="crunchers">
+    <app-numbercruncher *ngFor="let cruncher of crunchy; let i=index; last as isLast" 
+    [crunchID]="i"
+    [lasty]="isLast"
+    (removeMe)="removeCruncher($event)"
+    (calculate)="updateTotal($event.id, $event.results)"
+    ></app-numbercruncher>
+    <button id="addCruncher" (click)="addCruncher()">+</button>
+</div>
+<div *ngIf="crunchy.length > 1">
+    <p>Grand Totals:</p>
+    <p *ngFor="let total of grandTotal">{{total.name}} : {{tooly.dec2frac(total.quantity)}}</p>
+</div>

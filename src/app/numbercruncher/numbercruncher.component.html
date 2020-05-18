@@ -1,26 +1,28 @@
 <h1 *ngIf="recipeBank.recipes.length < 1">NO CSV LOADED</h1>
 
+<button id="removeButton" *ngIf="lasty && crunchID > 0" (click)="removeMe.emit(crunchID)">-</button>
+
 <div *ngIf="selection && searchRecipe(selection) == undefined" id="searchResults">
     <button *ngFor="let match of recipeBank.recipes | myFilter : selection" (click)="selection=match">{{match}}</button>
 </div>
 
-<p>Select final product and number to create per second:</p>
+<div>
+    <p>Select final product and number to create per second:</p>
 
-<label>Final Product: 
-    <input type="text" [(ngModel)]="selection" value="">
-</label>
+    <label>Final Product: 
+        <input type="text" [(ngModel)]="selection" value="" (keyup.enter)="selection='Engine unit'">
+    </label>
 
-<label>Desired Items/Second: 
-    <input type="number" [(ngModel)]="selectAmountItems" (input)="EqualizeInputs('I')">
-</label>
+    <div id="amountSelectors" *ngIf="selection && searchRecipe(selection) != undefined">
+        <label for="selectAmountItems">Desired Items/Second: </label>
+        <input type="number" id="selectAmountItems" [(ngModel)]="selectAmountItems" (input)="EqualizeInputs('I')" (keyup.enter)="firstDomino(selection)">
+        
+        <label for="selectAmountMachines">Desired Machines to Occupy: </label>
+        <input type="number" id="selectAmountMachines" [(ngModel)]="selectAmountMachines" (input)="EqualizeInputs('M')" (keyup.enter)="firstDomino(selection)">
+    </div>
 
-<label>Desired Machines to Occupy: 
-    <input type="number" [(ngModel)]="selectAmountMachines" (input)="EqualizeInputs('M')">
-</label>
-
-<!-- <span *ngIf="searchRecipe(selection) != undefined">For one machine, choose {{(getCraftSpeed(searchRecipe(selection))*searchRecipe(selection).products[selection])/searchRecipe(selection).time}}</span> -->
-<br>
-<button (click)="firstDomino(selection)">Calculate!</button>
+    <button *ngIf="selectAmountItems && selection && searchRecipe(selection) != undefined" (click)="firstDomino(selection)">Calculate!</button>
+</div>
 
 <br>
 <label for="assemblyChoice">Assembly Machine
@@ -38,6 +40,6 @@
 </label>
 <span>{{drillChoice}}</span>
 
-<p *ngFor="let item of crunchResult">{{item.name}} : {{this.fractionalize(item.quantity)}}</p>
+<p *ngFor="let item of crunchResult">{{item.name}} : {{tooly.dec2frac(item.quantity)}}</p>
 
 

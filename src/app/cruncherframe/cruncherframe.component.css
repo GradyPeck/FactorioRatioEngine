@@ -1,0 +1,16 @@
+#crunchers {
+    display: flex;
+    flex-direction: row;
+}
+
+app-numbercruncher {
+    margin-right: 20px;
+    position: relative;
+}
+
+#addCruncher {
+    height: 30px;
+    width: 30px;
+    position: relative;
+    top: 20px;
+}
