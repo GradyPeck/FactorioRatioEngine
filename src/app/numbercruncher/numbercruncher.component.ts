@@ -220,10 +220,24 @@ export class NumbercruncherComponent implements OnInit {
   //this would just be an alternate mode for searchRecipe, but I want to improve it eventually to do close matches
   public filterRecipes(searchTerm: string): string[] {
     let resulty: string[] = [];
+    /*potential priority order:
+      - exact match
+      - begins with
+      - contains
+      - "close to" (allowing errors)
+    */
+    //but I'm happy with this for now
     for (let recipe of this.recipeBank.recipes) {
       for (let prod in recipe.products) {
         if (prod.toUpperCase().includes(searchTerm.toUpperCase())) {
-          resulty.push(recipe.name);
+          //results that START with the string go at the start of the list
+          if (prod.toUpperCase().startsWith(searchTerm.toUpperCase())) {
+            resulty.unshift(recipe.name);
+          }
+          else {
+            //results that don't go at the end
+            resulty.push(recipe.name);
+          }
         }
       }
     }
