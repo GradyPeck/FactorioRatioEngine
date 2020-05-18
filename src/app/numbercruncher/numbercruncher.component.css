@@ -1,12 +1,41 @@
 #searchResults {
     display: flex;
     flex-direction: column;
-    float: right;
+}
+
+#greeting {
+    margin: 0px auto;
+}
+
+#selectors {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    display: flex;
+    justify-content: space-between;
+    white-space: pre-wrap;
+}
+
+.numberInput {
+    max-width: 100px;
+    text-indent: 0.3em;
+}
+
+.textInput {
+    flex: 1;
+    text-indent: 0.3em;
+}
+
+.selector {
+    margin-top: 10px;
 }
 
 #amountSelectors {
     display: flex;
     flex-direction: column;
+    margin-top: 0px;
 }
 
 #removeButton {
@@ -17,3 +46,4 @@
     height: 30px;
     width: 30px;
 }
+

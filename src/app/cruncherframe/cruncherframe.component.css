@@ -4,8 +4,10 @@
 }
 
 app-numbercruncher {
-    margin-right: 20px;
+    margin: 5px;
+    padding: 10px;
     position: relative;
+    border: solid black 1px;
 }
 
 #addCruncher {
