@@ -1,7 +1,7 @@
 <!-- this should never display -->
 <h1 *ngIf="recipeBank.recipes.length < 1">NO CSV LOADED</h1>
 
-<button id="removeButton" *ngIf="lasty && crunchID > 0" (click)="removeMe.emit(crunchID)">-</button>
+<!-- <button id="removeButton" *ngIf="lasty && crunchID > 0" (click)="removeMe.emit(crunchID)">-</button> -->
 
 <div id="selectors">
     <p id="greeting">Select final product and number to create per second:</p>
@@ -26,7 +26,7 @@
 <!-- Search Results -->
 <div *ngIf="selection && searchRecipe(selection) == undefined" id=searchResults>
     <div *ngFor="let match of filterRecipes(selection); let i=index">
-        <button style="background-color:red;" *ngIf="i == selectedResult; else elseBlock"  (click)="selection=match">{{match}}
+        <button style="background-color:mistyrose;" *ngIf="i == selectedResult; else elseBlock"  (click)="selection=match">{{match}}
         </button>
         <ng-template #elseBlock>
             <button (click)="selection=match">{{match}}</button>

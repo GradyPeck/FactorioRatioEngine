@@ -5,7 +5,10 @@
     (removeMe)="removeCruncher($event)"
     (calculate)="updateTotal($event.id, $event.results)"
     ></app-numbercruncher>
-    <button id="addCruncher" (click)="addCruncher()">+</button>
+    <div id="plusMinusBox">
+        <button id="addCruncher" (click)="addCruncher()">+</button>
+        <button *ngIf="crunchy.length > 1" id="removeCruncher" (click)="removeCruncher(crunchy.length-1)">-</button>
+    </div>
 </div>
 <div *ngIf="crunchy.length > 1">
     <p>Grand Totals:</p>

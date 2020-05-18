@@ -7,12 +7,23 @@ app-numbercruncher {
     margin: 5px;
     padding: 10px;
     position: relative;
-    border: solid black 1px;
+    border: solid slategray 2px;
+    background-color: gainsboro;
+}
+
+#plusMinusBox {
+    display: flex;
+    flex-direction: column;
+    padding-top: 5px;
 }
 
 #addCruncher {
     height: 30px;
     width: 30px;
-    position: relative;
-    top: 20px;
+}
+
+#removeCruncher {
+    height: 30px;
+    width: 30px;
+    margin-top: 2px;
 }
