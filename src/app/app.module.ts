@@ -10,7 +10,8 @@ import { NumbercruncherComponent } from './numbercruncher/numbercruncher.compone
 import { FileInputValueAccessor } from './FileInputValueAccessor';
 import { CsvloaderComponent } from './csvloader/csvloader.component';
 import { MyFilterPipe } from './my-filter.pipe';
-import { CruncherframeComponent } from './cruncherframe/cruncherframe.component'
+import { CruncherframeComponent } from './cruncherframe/cruncherframe.component';
+import { ResultbuttonComponent } from './resultbutton/resultbutton.component'
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { CruncherframeComponent } from './cruncherframe/cruncherframe.component'
     FileInputValueAccessor,
     CsvloaderComponent,
     MyFilterPipe,
-    CruncherframeComponent
+    CruncherframeComponent,
+    ResultbuttonComponent
   ],
   imports: [
     BrowserModule,

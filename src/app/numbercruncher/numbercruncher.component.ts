@@ -29,6 +29,7 @@ export class NumbercruncherComponent implements OnInit {
   @Output() calculate: EventEmitter<any> = new EventEmitter();
 
   selection: string = "";
+  selectedResult: number = -1;
   selectAmountItems: number;
   selectAmountMachines: number;
 
@@ -133,7 +134,7 @@ export class NumbercruncherComponent implements OnInit {
     for (let item of ary) {
       item.quantity = toolkit.fixFloat(item.quantity);
     }
-    this.calculate.emit({id: this.crunchID, results: ary});
+    this.calculate.emit({ id: this.crunchID, results: ary });
     this.crunchResult = ary;
   }
 
@@ -209,10 +210,46 @@ export class NumbercruncherComponent implements OnInit {
     }
   }
 
+  /*MOTHBALLED FOR NOW
   //used when numbercrunchers are removed from the frame's list, so they appear to "move over" correctly
   public shiftMe (productIn: string, rateIn: number) {
     this.selectAmountItems = rateIn;
     this.firstDomino(productIn);
+  }*/
+
+  //this would just be an alternate mode for searchRecipe, but I want to improve it eventually to do close matches
+  public filterRecipes(searchTerm: string): string[] {
+    let resulty: string[] = [];
+    for (let recipe of this.recipeBank.recipes) {
+      for (let prod in recipe.products) {
+        if (prod.toUpperCase().includes(searchTerm.toUpperCase())) {
+          resulty.push(recipe.name);
+        }
+      }
+    }
+    return resulty;
+  }
+
+  public selectionKey(keyIn: string) {
+    if(this.selection == "") {
+      this.selectedResult = -1;
+    }
+    switch (keyIn) {
+      case "ArrowUp":
+        this.selectedResult = Math.max(-1, this.selectedResult - 1);
+        break;
+      case "ArrowDown":
+        this.selectedResult = Math.min(this.filterRecipes(this.selection).length - 1, this.selectedResult + 1);
+        break;
+      case "Enter":
+        if (this.selectedResult >= 0) {
+          this.selection = this.filterRecipes(this.selection)[this.selectedResult];
+        }
+        break;
+      default:
+        this.selectedResult = -1;
+        break;
+    }
   }
 
 }
