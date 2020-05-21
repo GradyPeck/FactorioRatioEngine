@@ -41,7 +41,6 @@ export class CruncherframeComponent implements OnInit {
   }
 
   public updateTotal (id: number, newResults?: denseIng[]) {
-    console.log("updating total: " + id);
     this.grandTotal = [];
     if (id != -1) this.crunchers.splice(id, 1, newResults);
     //for each array of denseings in crunchers

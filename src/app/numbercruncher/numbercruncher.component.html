@@ -8,11 +8,13 @@
 
     <label class="selector">Final Product: 
         <input class="textInput" type="text" [(ngModel)]="selection" value="" (keyup)="selectionKey($event.key)">
+        <!-- <span>{{selectionGood}}</span> -->
     </label>
     <!-- *ngIf="selection && searchRecipe(selection) != undefined" -->
     <div id="amountSelectors">
         <label class="selector">Desired Items/Second: 
             <input class="numberInput" type="number" [(ngModel)]="selectAmountItems" (input)="EqualizeInputs('I')" (keyup.enter)="firstDomino(selection)">
+            <!-- <span>{{selectAmountGood}}</span> -->
         </label>
         
         <label class="selector" >Desired Machines to Occupy: 
@@ -20,16 +22,20 @@
         </label>
     </div>
     <!-- *ngIf="selectAmountItems && selection && searchRecipe(selection) != undefined" -->
-    <button class="selector" (click)="firstDomino(selection)">Calculate!</button>
+    <button *ngIf="selectAmountItems && selection && searchRecipe(selection) != undefined; else disCalc" class="selector" id="calculateButton" (click)="firstDomino(selection)">Calculate!</button>
+    <ng-template #disCalc>
+        <button class="selector" id="calculateButton" (click)="firstDomino(selection)" disabled>Calculate!</button>
+    </ng-template>
+    
 </div>
 
 <!-- Search Results -->
 <div *ngIf="selection && searchRecipe(selection) == undefined" id=searchResults>
     <div *ngFor="let match of filterRecipes(selection); let i=index">
-        <button style="background-color:mistyrose;" *ngIf="i == selectedResult; else elseBlock"  (click)="selection=match">{{match}}
+        <button style="background-color:mistyrose;" *ngIf="i == selectedResult; else elseBlock"  (click)="setSelection(match)">{{match}}
         </button>
         <ng-template #elseBlock>
-            <button (click)="selection=match">{{match}}</button>
+            <button (click)="setSelection(match)">{{match}}</button>
         </ng-template>
     </div>
 </div>

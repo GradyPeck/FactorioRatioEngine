@@ -29,9 +29,11 @@ export class NumbercruncherComponent implements OnInit {
   @Output() calculate: EventEmitter<any> = new EventEmitter();
 
   selection: string = "";
+  selectionGood: boolean = false;
   selectedResult: number = -1;
   selectAmountItems: number;
   selectAmountMachines: number;
+  selectAmountGood: boolean = false;
 
   assemblyChoice: number = 2;
   furnaceChoice: number = 2;
@@ -201,13 +203,14 @@ export class NumbercruncherComponent implements OnInit {
         this.selection = product;
       }
     }
-    if (inQuestion == null) { return; }
+    //if (inQuestion == null) { return; }
     if (modi == 'I') {
       this.selectAmountMachines = this.selectAmountItems / ((this.getCraftSpeed(inQuestion) * inQuestion.products[this.selection]) / inQuestion.time);
     }
     else if (modi == 'M') {
       this.selectAmountItems = this.selectAmountMachines * ((this.getCraftSpeed(inQuestion) * inQuestion.products[this.selection]) / inQuestion.time);
     }
+    this.selectAmountGood = true;
   }
 
   /*MOTHBALLED FOR NOW
@@ -232,15 +235,16 @@ export class NumbercruncherComponent implements OnInit {
         if (prod.toUpperCase().includes(searchTerm.toUpperCase())) {
           //results that START with the string go at the start of the list
           if (prod.toUpperCase().startsWith(searchTerm.toUpperCase())) {
-            resulty.unshift(recipe.name);
+            resulty.unshift(prod);
           }
           else {
             //results that don't go at the end
-            resulty.push(recipe.name);
+            resulty.push(prod);
           }
         }
       }
     }
+    if(resulty.length > 10) resulty = resulty.slice(0, 10);
     return resulty;
   }
 
@@ -264,6 +268,20 @@ export class NumbercruncherComponent implements OnInit {
         this.selectedResult = -1;
         break;
     }
+    if (this.selection && this.searchRecipe(this.selection) != null) this.selectionGood = true;
+    else{
+      this.selectionGood = false;
+      this.selectAmountItems = undefined;
+      this.selectAmountMachines = undefined;
+      this.crunchResult = [];
+    }
+  }
+
+  public setSelection (toSet: string) {
+    this.selection = toSet;
+    this.selectAmountItems = undefined;
+    this.selectAmountMachines = undefined;
+    this.crunchResult = [];
   }
 
 }

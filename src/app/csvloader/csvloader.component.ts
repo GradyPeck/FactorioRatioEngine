@@ -82,18 +82,59 @@ export class CsvloaderComponent implements OnInit {
         }
         //manually add oil processing...
         this.recipeBank.recipes.push({name: "Advanced Oil Processing", ingredients : {"Crude oil" : 100, "Water" : 50}, products : {"Heavy oil" : 25, "Light oil" : 45, "Petroleum gas" : 55}, data : {"Produced by" : "Oil refinery"}, time: 5});
+        //...and space science packs
+        this.recipeBank.recipes.push({name: "Space science pack", ingredients : {"Rocket part" : 100, "Satellite" : 1}, products : {"Space science pack" : 1000}, data : {"Produced by" : "Rocket silo"}, time: 40.33});
+        //and fudge some things:
+        //add sulfuric acid to uranium ore's ingredients and double the mining time
+        this.tweakRecipe("Uranium ore", {name: "Uranium ore", ingredients: {"Sulfuric acid": 1}, products: {"Uranium ore": 1}, data: {"Produced by" : "Electric mining drill"}, time: 4});
+        //change the batch size of water to 1200
+        this.tweakRecipe("Water", {name: "Water", ingredients: {}, products: {"Water": 1200}, data: {"Produced by" : "Offshore pump"}, time: 1});
+        //make crude oil 1:1:1 so it's literally the crude oil amount (because it's impossible to calculate pumpjacks)
+        this.tweakRecipe("Crude oil", {name: "Crude oil", ingredients: {}, products: {"Crude oil": 1}, data: {"Produced by" : "Pumpjack"}, time: 1});
 
+        //hunt down some problematic Uranium recipes
+        for (let i = 0; i < this.recipeBank.recipes.length; i++) {
+          if (this.recipeBank.recipes[i].name == "Uranium-235" ||
+          this.recipeBank.recipes[i].name == "Uranium-238" ||
+          this.recipeBank.recipes[i].name == "Nuclear fuel reprocessing" ||
+          this.recipeBank.recipes[i].name == "Kovarex enrichment process") {
+            this.recipeBank.recipes.splice(i, 1);
+            i--;
+          }
+        }//1 fuel cell = 80,000 units of steam
+        //for some reason this crashes everything horribly
+        //this.tweakRecipe("Used up uranium fuel cell", {name: "Used up uranium fuel cell", ingredients: {water: 80000, "Uranium fuel cell": 1}, products: {"Used up uranium fuel cell": 1, "Steam": 80000}, data: {"Produced by": "Nuclear reactor"}, time: 200});
         //this.printRecipes();
       }, (error: NgxCSVParserError) => {
         console.log('Error', error);
       });
     //this isn't missing a bracket, this function is just indented weird for readability
   }
+
+  public tweakRecipe (nom: string, newVersion: IRecipe) {
+    for (let i = 0; i < this.recipeBank.recipes.length; i++) {
+      if (this.recipeBank.recipes[i].name == nom) {
+        this.recipeBank.recipes[i] = newVersion;
+      }
+    }
+  }
     
   //for debugging
   public printRecipes () {
     for (let recipe of this.recipeBank.recipes) {
-      //console.log (recipe.name + ": " + recipe.time/this.getCraftSpeed(recipe));
+      let recipeOut: string = "";
+      for (let keyy in recipe) {
+        recipeOut = recipeOut + keyy + ": ";
+        if(keyy == "products" || keyy == "ingredients") {
+          for (let keyo in recipe[keyy]) {
+            recipeOut = recipeOut + keyo + ": " + recipe[keyy][keyo] + ", ";
+          }
+        }
+        else {
+          recipeOut = recipeOut + recipe[keyy];
+        }
+      }
+      console.log (recipeOut);
     }
   }
 

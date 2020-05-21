@@ -38,6 +38,14 @@ label {
     margin-top: 0px;
 }
 
+#calculateButton {
+    width: 100px;
+    height: 25px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* currently unused - see the one on CruncherFrame
 #removeButton {
     float: right;
     position: absolute;
@@ -45,5 +53,5 @@ label {
     top: 60px;
     height: 30px;
     width: 30px;
-}
+}*/
 
