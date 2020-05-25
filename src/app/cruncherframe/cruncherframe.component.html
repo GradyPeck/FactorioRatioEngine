@@ -10,13 +10,11 @@
         <button *ngIf="crunchy.length > 1" id="removeCruncher" (click)="removeCruncher(crunchy.length-1)">-</button>
     </div>
 </div>
-<div id="resultLists">
-    <div *ngIf="crunchy.length > 1">
-        <p>Grand Totals:</p>
-        <p *ngFor="let total of grandTotal">{{total.name}} : {{tooly.dec2frac(total.quantity)}}</p>
-    </div>
-    <div *ngIf="grandTotal">
-        <p>Perfected Totals:</p>
-        <p *ngFor="let tot of perfectRatio(grandTotal)">{{tot.name}} : {{tooly.dec2frac(tot.quantity)}}</p>
-    </div>
+<div *ngIf="crunchy.length > 1">
+    <p>Grand Totals:</p>
+    <p *ngFor="let total of grandTotal">{{total.name}} : {{tooly.dec2frac(total.quantity)}}</p>
+</div>
+<div *ngIf="grandTotal">
+    <p>Perfected Totals:</p>
+    <p *ngFor="let tot of perfectRatio(grandTotal)">{{tot.name}} : {{tooly.dec2frac(tot.quantity)}}</p>
 </div>

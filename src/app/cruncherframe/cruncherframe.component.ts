@@ -57,7 +57,7 @@ export class CruncherframeComponent implements OnInit {
         }
         if (!found) {
           //construct a new densIng so you don't accidentally make an alias instead of a copy
-          this.grandTotal.push({ name: this.crunchers[i][z].name, quantity: this.crunchers[i][z].quantity, prodType: this.crunchers[i][z].prodType });
+          this.grandTotal.push({ name: this.crunchers[i][z].name, quantity: this.crunchers[i][z].quantity });
         }
       }
     }
@@ -151,7 +151,7 @@ export class CruncherframeComponent implements OnInit {
   public safeCopy(toCopy: denseIng[]): denseIng[] {
     let toReturn: denseIng[] = [];
     for (let item of toCopy) {
-      let newItem: denseIng = { name: item.name, quantity: item.quantity, prodType: item.prodType };
+      let newItem: denseIng = { name: item.name, quantity: item.quantity };
       toReturn.push(newItem);
     }
     return toReturn;

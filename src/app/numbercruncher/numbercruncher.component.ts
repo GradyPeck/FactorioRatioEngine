@@ -80,13 +80,13 @@ export class NumbercruncherComponent implements OnInit {
         //divide the demandRate over the batch size of ingredient's recipe
         demandRate = demandRate / ingyRecipe.products[ingy];
         //demandRate is multiplied by time to yield number of machines
-        totalIngrees.push({ name: ingy, quantity: demandRate * (ingyRecipe.time / this.getCraftSpeed(ingyRecipe)), prodType: ingyRecipe.prodType });
+        totalIngrees.push({ name: ingy, quantity: demandRate * (ingyRecipe.time / this.getCraftSpeed(ingyRecipe)) });
         //cue up the next layer
         totalIngrees.push(...this.recurseRecipe(ingyRecipe, demandRate));
       }
       else {
         //catch raw resources and broken things
-        totalIngrees.push({ name: ingy, quantity: demandRate, prodType: "honk" });
+        totalIngrees.push({ name: ingy, quantity: demandRate });
       }
     }
     return totalIngrees;
@@ -104,7 +104,7 @@ export class NumbercruncherComponent implements OnInit {
       }
     }
     //kick off the recursion with a fake recipe so the top layer gets included in the results
-    let ary: denseIng[] = this.recurseRecipe({ name: "fake", ingredients: { [searchTerm]: 1 }, products: {}, data: {}, time: 1, prodType: "" }, this.selectAmountItems);
+    let ary: denseIng[] = this.recurseRecipe({ name: "fake", ingredients: { [searchTerm]: 1 }, products: {}, data: {}, time: 1 }, this.selectAmountItems);
 
     //#region ObjectConsolidation
     /* object-based result consolidation (Bring back if you want an ary object)
@@ -137,83 +137,6 @@ export class NumbercruncherComponent implements OnInit {
       item.quantity = toolkit.fixFloat(item.quantity);
     }
     this.calculate.emit({ id: this.crunchID, results: ary });
-    ary.sort((a, b) => {
-      let aScore: number;
-      switch (a.prodType) {
-        case "Assembling machine 1":
-          aScore = 2;
-          break;
-        case "Assembling machine 2":
-          aScore = 2;
-          break;
-        case "Centrifuge":
-          aScore = 1;
-          break;
-        case "Electric mining drill":
-          aScore = 0;
-          break;
-        case "Stone furnace":
-          aScore = 1;
-          break;
-        case "Burner mining drill":
-          aScore = 0;
-          break;
-        case "Pumpjack":
-          aScore = 0;
-          break;
-        case "Offshore pump":
-          aScore = 0;
-          break;
-        case "Chemical plant":
-          aScore = 2;
-          break;
-        case "Oil refinery":
-          aScore = 1;
-          break;
-        default:
-          aScore = 10;
-          break;
-      }
-      let bScore: number;
-      switch (b.prodType) {
-        case "Assembling machine 1":
-          bScore = 2;
-          break;
-        case "Assembling machine 2":
-          bScore = 2;
-          break;
-        case "Centrifuge":
-          bScore = 1;
-          break;
-        case "Electric mining drill":
-          bScore = 0;
-          break;
-        case "Stone furnace":
-          bScore = 1;
-          break;
-        case "Burner mining drill":
-          bScore = 0;
-          break;
-        case "Pumpjack":
-          bScore = 0;
-          break;
-        case "Offshore pump":
-          bScore = 0;
-          break;
-        case "Chemical plant":
-          bScore = 2;
-          break;
-        case "Oil refinery":
-          bScore = 1;
-          break;
-        default:
-          bScore = 10;
-          break;
-      }
-
-      return bScore - aScore;
-    }
-    )
     this.crunchResult = ary;
   }
 
@@ -246,12 +169,9 @@ export class NumbercruncherComponent implements OnInit {
     switch (this.assemblyChoice) {
       case 1:
         this.chosenMachines["Assembling machine 1"] = 0.5;
-        this.chosenMachines["Assembling machine 2"] = 0.75;
-        this.chosenMachines["Assembling machine 3"] = 1.25;
         break;
       case 2:
         this.chosenMachines["Assembling machine 2"] = 0.75;
-        this.chosenMachines["Assembling machine 3"] = 1.25;
         break;
       case 3:
         this.chosenMachines["Assembling machine 3"] = 1.25;
@@ -268,7 +188,6 @@ export class NumbercruncherComponent implements OnInit {
     switch (this.drillChoice) {
       case 1:
         this.chosenMachines["Burner mining drill"] = 1;
-        this.chosenMachines["Electric mining drill"] = 2;
         break;
       case 2:
         this.chosenMachines["Electric mining drill"] = 2;
@@ -317,12 +236,12 @@ export class NumbercruncherComponent implements OnInit {
         }
       }
     }
-    if (resulty.length > 10) resulty = resulty.slice(0, 10);
+    if(resulty.length > 10) resulty = resulty.slice(0, 10);
     return resulty;
   }
 
   public selectionKey(keyIn: string) {
-    if (this.selection == "") {
+    if(this.selection == "") {
       this.selectedResult = -1;
     }
     switch (keyIn) {
@@ -342,13 +261,13 @@ export class NumbercruncherComponent implements OnInit {
         break;
     }
     //if (!this.selection && this.searchRecipe(this.selection) == null){
-    this.selectAmountItems = undefined;
-    this.selectAmountMachines = undefined;
-    this.crunchResult = [];
+      this.selectAmountItems = undefined;
+      this.selectAmountMachines = undefined;
+      this.crunchResult = [];
     //}
   }
 
-  public setSelection(toSet: string) {
+  public setSelection (toSet: string) {
     this.selection = toSet;
     this.selectAmountItems = undefined;
     this.selectAmountMachines = undefined;
