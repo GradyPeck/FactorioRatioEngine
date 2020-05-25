@@ -65,7 +65,6 @@ export class toolkit {
         }
     }
 
-    //currently unused. Lists all valid factors excluding 1. 
     public static factor(nummy: number) : number[] {
         let factors: number[] = [];
         for (let i = 2; i <= nummy; i++) {
@@ -74,10 +73,18 @@ export class toolkit {
         return factors;
     }
 
-    //Prime factorization (including duplicates)
+    /*public static primeFactor(nummy: number) : number[] {
+        let factors: number[] = toolkit.factor(nummy);
+        let primeFactors: number[] = [];
+        for (let facty of factors) {
+            if (toolkit.factor(facty).length <= 1) primeFactors.push(facty);
+        }
+        return primeFactors;
+    }*/
+
     public static primeFactor(nummy: number) : number[] {
         let factors: number[] = [];
-        for (let i = 2; i <= nummy; i++) {
+        for (let i = 2; i < nummy; i++) {
             if (nummy % i == 0) {
                 factors.push(i);
                 nummy = nummy / i;

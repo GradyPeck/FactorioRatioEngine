@@ -67,7 +67,7 @@ export class CruncherframeComponent implements OnInit {
     let safeResults = this.safeCopy(results);
     let resStrings: string[] = [];
     for (let result of safeResults) {
-      if (result.name.includes("plate") == false && result.name.includes("ore") == false && result.name != "Crude oil" && result.name != "Water" && result.name != "Coal" && result.name != "Stone") resStrings.push(this.tooly.dec2frac(result.quantity));
+      if (result.name.includes("plate") == false && result.name.includes("ore") == false && result.name.includes("Crude") == false && result.name.includes("Water") == false) resStrings.push(this.tooly.dec2frac(result.quantity));
     }
     let resFracs: number[] = [];
     for (let resulty of resStrings) {
@@ -76,46 +76,78 @@ export class CruncherframeComponent implements OnInit {
         if (resFracs.includes(fracTail) == false) resFracs.push(fracTail);
       }
     }
+    //cull duplicate denominators
+    /*for (let i = 0; i < resFracs.length; i++) {
+      for (let z = i + 1; z < resFracs.length; z++) {
+        if (resFracs[i] == resFracs[z]) {
+          //remove result b
+          resFracs.splice(z, 1);
+          //back up the index to avoid skipping
+          z--;
+        }
+      }
+    }*/
     //multiply results by denominators
     let perfTotals: denseIng[] = this.safeCopy(results);
     for (let total of perfTotals) {
       for (let frac of resFracs) {
-        total.quantity = this.tooly.fixFloat(total.quantity * frac);
+        total.quantity = total.quantity * frac;
       }
     }
-    //console.log(perfTotals);
+    console.log(perfTotals);
     let factors: number[][] = [];
-    //list all the prime factors
+    //list all the prime factors of 
     for (let totaly of perfTotals) {
-      if (totaly.name.includes("plate") == false && totaly.name.includes("ore") == false && totaly.name != "Crude oil" && totaly.name != "Water" && totaly.name != "Coal" && totaly.name != "Stone") {
+      if (totaly.name.includes("plate") == false && totaly.name.includes("ore") == false && totaly.name.includes("Crude") == false && totaly.name.includes("Water") == false) {
         factors.push(this.tooly.primeFactor(totaly.quantity));
         //console.log(totaly.name + ", subfactors: " + this.tooly.primeFactor(totaly.quantity));
       }
     }
-    let greatDivisor: number = 1;
-    for (let i = 0; i < factors[0].length; i++) {
-      let faccount: number = 1;
-      for (let z = 1; z < factors.length; z++) {
-        for (let w = 0; w < factors[z].length; w++) {
-          if (factors[z][w] == factors[0][i]) {
-            factors[z].splice(w, 1);
-            faccount++;
-            break;
-          }
+    //console.log("factors: " + factors);
+    //multiply doubled-up primes to catch perfect squares, cubes, etc
+    //find all distinct prime factors
+    let distinctFactors: number[] = [];
+    for (let faccy of factors) {
+      console.log(faccy);
+      for (let i = 0; i < faccy.length; i++) {
+        let faccount: number = 1;
+        for (let z = 0; z < faccy.length; z++) {
+          if (i != z && faccy[i] == faccy[z]) faccount++;
+        }
+        for (let y = 1; y <= faccount; y++) {
+          console.log(y);
+          if(!distinctFactors.includes(Math.pow(faccy[i], y))) distinctFactors.push(Math.pow(faccy[i], y));
+          if(y > 1) faccy.push(Math.pow(faccy[i], y));
         }
       }
-      if (faccount == factors.length) {
-        greatDivisor = greatDivisor * factors[0][i];
-      }
+      /*for (let factum of faccy) {
+        if (!distinctFactors.includes(factum)) distinctFactors.push(factum);
+      }*/
     }
-    //console.log(factors);
-    for (let tot of perfTotals) {
-      tot.quantity = tot.quantity / greatDivisor;
+    console.log("factors: " + factors);
+    console.log("distinct prime factors: " + distinctFactors);
+    //filter down to only common distinct prime factors
+    let dcpFactors: number[] = [];
+    for (let facto of distinctFactors) {
+      let commonFactor: boolean = true;
+      for (let faccy of factors) {
+        if (faccy.includes(facto) == false) commonFactor = false;
+      }
+      if (commonFactor) dcpFactors.push(facto);
+    }
+    console.log("dcp factors: " + dcpFactors);
+    //multiply those together to get the reduction factor
+    let dcpfProduct: number = 1;
+    for (let df of dcpFactors) {
+      dcpfProduct = dcpfProduct * df;
+    }
+    console.log("distinct common factor product: " + dcpfProduct);
+    for (let totaloo of perfTotals) {
+      totaloo.quantity = totaloo.quantity / dcpfProduct;
     }
     return perfTotals;
   }
 
-  //copies an array without creating any aliases
   public safeCopy(toCopy: denseIng[]): denseIng[] {
     let toReturn: denseIng[] = [];
     for (let item of toCopy) {
