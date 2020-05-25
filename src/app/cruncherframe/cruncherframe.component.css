@@ -27,3 +27,8 @@ app-numbercruncher {
     width: 30px;
     margin-top: 2px;
 }
+
+#resultLists {
+    display: flex;
+    flex-direction: row;
+}

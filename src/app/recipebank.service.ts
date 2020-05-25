@@ -18,9 +18,11 @@ export interface IRecipe {
   products : Object;
   data : Object;
   time : number;
+  prodType: string;
 }
 
 export interface denseIng {
   name : string;
   quantity : number;
+  prodType: string;
 }
