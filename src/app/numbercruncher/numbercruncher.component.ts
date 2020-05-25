@@ -25,7 +25,6 @@ export class NumbercruncherComponent implements OnInit {
 
   @Input() crunchID: number;
   @Input() lasty: boolean;
-  @Output() removeMe: EventEmitter<any> = new EventEmitter();
   @Output() calculate: EventEmitter<any> = new EventEmitter();
 
   selection: string = "";
@@ -106,19 +105,6 @@ export class NumbercruncherComponent implements OnInit {
     //kick off the recursion with a fake recipe so the top layer gets included in the results
     let ary: denseIng[] = this.recurseRecipe({ name: "fake", ingredients: { [searchTerm]: 1 }, products: {}, data: {}, time: 1 }, this.selectAmountItems);
 
-    //#region ObjectConsolidation
-    /* object-based result consolidation (Bring back if you want an ary object)
-    consolidate results
-    let newAry = {};
-    for (let thingy of ary) {
-      if(newAry[thingy.name] == undefined) {
-        newAry[thingy.name] = thingy.quantity;
-      }
-      else {
-        newAry[thingy.name] = newAry[thingy.name] + thingy.quantity;
-      }
-    }*/
-    //#endregion
     //consolidate results
     for (let i = 0; i < ary.length; i++) {
       for (let z = i + 1; z < ary.length; z++) {
@@ -187,10 +173,10 @@ export class NumbercruncherComponent implements OnInit {
     }
     switch (this.drillChoice) {
       case 1:
-        this.chosenMachines["Burner mining drill"] = 1;
+        this.chosenMachines["Burner mining drill"] = 0.25;
         break;
       case 2:
-        this.chosenMachines["Electric mining drill"] = 2;
+        this.chosenMachines["Electric mining drill"] = 0.5;
         break;
     }
   }
