@@ -14,3 +14,7 @@
     <p>Grand Totals:</p>
     <p *ngFor="let total of grandTotal">{{total.name}} : {{tooly.dec2frac(total.quantity)}}</p>
 </div>
+<div *ngIf="grandTotal">
+    <p>Perfected Totals:</p>
+    <p *ngFor="let tot of perfectRatio(grandTotal)">{{tot.name}} : {{tooly.dec2frac(tot.quantity)}}</p>
+</div>

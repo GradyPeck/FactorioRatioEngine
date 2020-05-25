@@ -34,14 +34,14 @@ export class toolkit {
     }*/
 
     //convert all decimals to fractions
-    public static dec2frac(d: number) {
+    public static dec2frac(d: number) : string {
         let df: number = 1;
         let top: number = 1;
         let bot: number = 1;
 
         let lefty: number = Math.trunc(d);
         d = d - lefty;
-        if (d == 0) return lefty;
+        if (d == 0) return String(lefty);
 
         //adds a margin of tolerance to handle floating point errors
         while (!toolkit.isClose(d, df)) {
@@ -63,6 +63,35 @@ export class toolkit {
         else {
             return false;
         }
+    }
+
+    public static factor(nummy: number) : number[] {
+        let factors: number[] = [];
+        for (let i = 2; i <= nummy; i++) {
+            if (nummy % i == 0) factors.push(i);
+        }
+        return factors;
+    }
+
+    /*public static primeFactor(nummy: number) : number[] {
+        let factors: number[] = toolkit.factor(nummy);
+        let primeFactors: number[] = [];
+        for (let facty of factors) {
+            if (toolkit.factor(facty).length <= 1) primeFactors.push(facty);
+        }
+        return primeFactors;
+    }*/
+
+    public static primeFactor(nummy: number) : number[] {
+        let factors: number[] = [];
+        for (let i = 2; i < nummy; i++) {
+            if (nummy % i == 0) {
+                factors.push(i);
+                nummy = nummy / i;
+                i--;
+            }
+        }
+        return factors;
     }
 
 }

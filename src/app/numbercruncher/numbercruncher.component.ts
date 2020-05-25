@@ -29,11 +29,11 @@ export class NumbercruncherComponent implements OnInit {
   @Output() calculate: EventEmitter<any> = new EventEmitter();
 
   selection: string = "";
-  selectionGood: boolean = false;
+  //selectionGood: boolean = false;
   selectedResult: number = -1;
   selectAmountItems: number;
   selectAmountMachines: number;
-  selectAmountGood: boolean = false;
+  //selectAmountGood: boolean = false;
 
   assemblyChoice: number = 2;
   furnaceChoice: number = 2;
@@ -210,15 +210,7 @@ export class NumbercruncherComponent implements OnInit {
     else if (modi == 'M') {
       this.selectAmountItems = this.selectAmountMachines * ((this.getCraftSpeed(inQuestion) * inQuestion.products[this.selection]) / inQuestion.time);
     }
-    this.selectAmountGood = true;
   }
-
-  /*MOTHBALLED FOR NOW
-  //used when numbercrunchers are removed from the frame's list, so they appear to "move over" correctly
-  public shiftMe (productIn: string, rateIn: number) {
-    this.selectAmountItems = rateIn;
-    this.firstDomino(productIn);
-  }*/
 
   //this would just be an alternate mode for searchRecipe, but I want to improve it eventually to do close matches
   public filterRecipes(searchTerm: string): string[] {
@@ -268,13 +260,11 @@ export class NumbercruncherComponent implements OnInit {
         this.selectedResult = -1;
         break;
     }
-    if (this.selection && this.searchRecipe(this.selection) != null) this.selectionGood = true;
-    else{
-      this.selectionGood = false;
+    //if (!this.selection && this.searchRecipe(this.selection) == null){
       this.selectAmountItems = undefined;
       this.selectAmountMachines = undefined;
       this.crunchResult = [];
-    }
+    //}
   }
 
   public setSelection (toSet: string) {
