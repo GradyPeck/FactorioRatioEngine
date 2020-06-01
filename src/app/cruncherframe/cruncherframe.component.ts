@@ -27,6 +27,7 @@ export class CruncherframeComponent implements OnInit {
   }
 
   public removeCruncher() {
+    this.crunchy.pop();
     this.crunchers.pop();
     this.updateTotal(-1);
   }

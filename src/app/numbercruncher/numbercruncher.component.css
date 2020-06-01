@@ -43,15 +43,16 @@ label {
     height: 25px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 5px;
 }
 
-/* currently unused - see the one on CruncherFrame
-#removeButton {
-    float: right;
-    position: absolute;
-    left: 361px;
-    top: 60px;
-    height: 30px;
-    width: 30px;
-}*/
+#resultList {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+app-resultbutton {
+    margin: 3px;
+}
 

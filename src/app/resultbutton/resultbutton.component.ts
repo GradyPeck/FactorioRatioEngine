@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-resultbutton',
@@ -10,6 +10,15 @@ export class ResultbuttonComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  @Input() itemName: string;
+  @Input() itemQuant: string;
+
+  public toSnake(notsnek: string): string {
+    notsnek = notsnek.replace(/ /g, "_");
+    notsnek = notsnek + ".png";
+    return notsnek;
   }
 
 }

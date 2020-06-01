@@ -89,9 +89,11 @@ export class CsvloaderComponent implements OnInit {
         this.recipeBank.recipes.find((a) => a.name == "Uranium ore").ingredients = {"Sulfuric acid": 1};
         //change the batch size of water to 1200
         this.recipeBank.recipes.find((a) => a.name == "Water").products = {"Water": 1200};
+        //make uranium isotopes not horribly crashy
+        this.recipeBank.recipes.find((a) => a.name == "Uranium processing").products = {"Uranium-238": 1};
+        this.recipeBank.recipes.push({name: "Uranium enrichment", ingredients : {"Uranium-238": 3}, products : {"Uranium-235" : 1}, data : {"Produced by" : ["Centrifuge"]}, time: 60});
 
         //hunt down some problematic Uranium recipes
-        /*
         for (let i = 0; i < this.recipeBank.recipes.length; i++) {
           if (this.recipeBank.recipes[i].name == "Uranium-235" ||
           this.recipeBank.recipes[i].name == "Uranium-238" ||
@@ -100,10 +102,10 @@ export class CsvloaderComponent implements OnInit {
             this.recipeBank.recipes.splice(i, 1);
             i--;
           }
-        }*/
+        }
         //1 fuel cell = 80,000 units of steam
         //like all uranium recipes, this causes crashes
-        //{"Used up uranium fuel cell", {name: "Used up uranium fuel cell", ingredients: {water: 80000, "Uranium fuel cell": 1}, products: {"Used up uranium fuel cell": 1, "Steam": 80000}, data: {"Produced by": "Nuclear reactor"}, time: 200};
+        //this.recipeBank.recipes.push({name: "Used up uranium fuel cell", ingredients: {water: 80000, "Uranium fuel cell": 1}, products: {"Used up uranium fuel cell": 1, "Steam": 80000}, data: {"Produced by": "Nuclear reactor"}, time: 200});
         
         //this.printRecipes();
       }, (error: NgxCSVParserError) => {
@@ -115,19 +117,13 @@ export class CsvloaderComponent implements OnInit {
   //for debugging
   public printRecipes () {
     for (let recipe of this.recipeBank.recipes) {
-      let recipeOut: string = "";
-      for (let keyy in recipe) {
-        recipeOut = recipeOut + keyy + ": ";
-        if(keyy == "products" || keyy == "ingredients") {
-          for (let keyo in recipe[keyy]) {
-            recipeOut = recipeOut + keyo + ": " + recipe[keyy][keyo] + ", ";
-          }
-        }
-        else {
-          recipeOut = recipeOut + recipe[keyy];
+      let recipeOut: string = recipe.name + ": ";
+      for (let keyy in recipe.data) {
+        if(keyy.includes("speed")) {
+          recipeOut = recipeOut + keyy + ": " + recipe.data[keyy];
+          console.log (recipeOut);
         }
       }
-      console.log (recipeOut);
     }
   }
 
