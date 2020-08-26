@@ -78,14 +78,16 @@ export class NumbercruncherComponent implements OnInit {
       if (ingyRecipe != null) {
         //divide the demandRate over the batch size of ingredient's recipe
         demandRate = demandRate / ingyRecipe.products[ingy];
+        //find producer
+        let myproducer: string = this.getCraftSpeed(ingyRecipe);
         //demandRate is multiplied by time to yield number of machines
-        totalIngrees.push({ name: ingy, quantity: demandRate * (ingyRecipe.time / this.getCraftSpeed(ingyRecipe)) });
+        totalIngrees.push({ name: ingy, quantity: demandRate * (ingyRecipe.time / this.chosenMachines[myproducer]), producer: myproducer });
         //cue up the next layer
         totalIngrees.push(...this.recurseRecipe(ingyRecipe, demandRate));
       }
       else {
         //catch raw resources and broken things
-        totalIngrees.push({ name: ingy, quantity: demandRate });
+        totalIngrees.push({ name: ingy, quantity: demandRate, producer: "Steam" });
       }
     }
     return totalIngrees;
@@ -118,15 +120,37 @@ export class NumbercruncherComponent implements OnInit {
         }
       }
     }
-    //round everything to the nearest meaningful place to fix floating point errors   
+    //round everything to the nearest meaningful place to fix floating point errors
+    //also find the oil products  
+    let oilFractions: {} = {"Heavy oil": 0, "Light oil": 0, "Petroleum gas": 0};
     for (let item of ary) {
       item.quantity = toolkit.fixFloat(item.quantity);
+      if (item.name == "Heavy oil" || item.name == "Light oil" || item.name == "Petroleum gas") {
+        oilFractions[item.name] = item.quantity;
+      }
     }
+    //process oil products
+    let oilStuff = this.tooly.refine(oilFractions["Heavy oil"], oilFractions["Light oil"], oilFractions["Petroleum gas"]);
+    if(oilStuff.Refineries) ary.push({name: "Advanced oil processing", quantity: oilStuff.Refineries, producer: "Oil refinery"});
+    if(oilStuff.LC) ary.push({name: "Heavy oil cracking", quantity: oilStuff.LC, producer: "Chemical plant"});
+    if(oilStuff.GC) ary.push({name: "Light oil cracking", quantity: oilStuff.GC, producer: "Chemical plant"});
+
+    //take out the original oil entries
+    for (let z = 0; z < ary.length; z++) {
+      if (ary[z].name == "Heavy oil" || ary[z].name == "Light oil" || ary[z].name == "Petroleum gas") {
+        //remove old entry
+        ary.splice(z, 1);
+        //back up the index to avoid skipping
+        z--;
+      }
+    }
+    
+
     this.calculate.emit({ id: this.crunchID, results: ary });
     this.crunchResult = ary;
   }
 
-  public getCraftSpeed(recipe: IRecipe): number {
+  public getCraftSpeed(recipe: IRecipe): string {
     let producedBy: string[] = recipe.data["Produced by"];
     for (let i = 0; i < producedBy.length; i++) {
       if (producedBy[i] == "Crafting#Manual crafting") {
@@ -136,9 +160,11 @@ export class NumbercruncherComponent implements OnInit {
     }
     for (let producer in this.chosenMachines) {
       if (producedBy.includes(producer)) {
-        return this.chosenMachines[producer];
+        return producer;
       }
     }
+    //things that can't find their producer will display a steam cloud
+    return "Steam";
   }
 
   public chooseMachines() {
@@ -191,10 +217,10 @@ export class NumbercruncherComponent implements OnInit {
     }
     //if (inQuestion == null) { return; }
     if (modi == 'I') {
-      this.selectAmountMachines = this.selectAmountItems / ((this.getCraftSpeed(inQuestion) * inQuestion.products[this.selection]) / inQuestion.time);
+      this.selectAmountMachines = this.selectAmountItems / ((this.chosenMachines[this.getCraftSpeed(inQuestion)] * inQuestion.products[this.selection]) / inQuestion.time);
     }
     else if (modi == 'M') {
-      this.selectAmountItems = this.selectAmountMachines * ((this.getCraftSpeed(inQuestion) * inQuestion.products[this.selection]) / inQuestion.time);
+      this.selectAmountItems = this.selectAmountMachines * ((this.chosenMachines[this.getCraftSpeed(inQuestion)] * inQuestion.products[this.selection]) / inQuestion.time);
     }
   }
 

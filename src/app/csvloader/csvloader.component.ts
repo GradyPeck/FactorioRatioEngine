@@ -81,7 +81,7 @@ export class CsvloaderComponent implements OnInit {
           }
         }
         //manually add oil processing...
-        this.recipeBank.recipes.push({name: "Advanced Oil Processing", ingredients : {"Crude oil" : 100, "Water" : 50}, products : {"Heavy oil" : 25, "Light oil" : 45, "Petroleum gas" : 55}, data : {"Produced by" : "Oil refinery"}, time: 5});
+        //this.recipeBank.recipes.push({name: "Advanced Oil Processing", ingredients : {"Crude oil" : 100, "Water" : 50}, products : {"Heavy oil" : 25, "Light oil" : 45, "Petroleum gas" : 55}, data : {"Produced by" : "Oil refinery"}, time: 5});
         //...and space science packs
         this.recipeBank.recipes.push({name: "Space science pack", ingredients : {"Rocket part" : 100, "Satellite" : 1}, products : {"Space science pack" : 1000}, data : {"Produced by" : "Rocket silo"}, time: 40.33});
         //and fudge some things:

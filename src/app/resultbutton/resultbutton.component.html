@@ -1,4 +1,6 @@
 <div>
-    <img src="../../assets/Icons/{{toSnake(itemName)}}" alt="{{itemName}}">
-    <span>{{itemName}}: {{itemQuant}}</span>
+    <img src="../../assets/Icons/{{toSnake(myItem.producer)}}" alt="{{myItem.producer}}">
+    <img src="../../assets/Icons/{{toSnake(myItem.name)}}" alt="{{myItem.name}}">
+    <span>{{myItem.name}}: {{tooly.dec2frac(myItem.quantity)}}</span>
+    <input *ngIf="checky" type="checkbox" (click)="PerfecToggle()" checked>
 </div>

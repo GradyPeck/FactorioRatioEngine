@@ -57,7 +57,7 @@
     <span>{{drillChoice}}</span>
 </div>
 <div id="resultList">
-    <app-resultbutton *ngFor="let item of crunchResult" [itemName]="item.name" [itemQuant]="tooly.dec2frac(item.quantity)"></app-resultbutton>
+    <app-resultbutton *ngFor="let item of crunchResult" [myItem]="item"></app-resultbutton>
 </div>
 
 

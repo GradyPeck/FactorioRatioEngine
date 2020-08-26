@@ -23,4 +23,5 @@ export interface IRecipe {
 export interface denseIng {
   name : string;
   quantity : number;
+  producer : string;
 }
