@@ -2,26 +2,6 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.22.
 
-## Development server
+This is a calculator for computing the requirements of arbitrary production rates in the strategy game Factorio. It uses item recipe data scraped from the Factorio wiki by https://github.com/peckben1, parsing his CSV into JSON. 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Factorio is a factory-building game in which machines are used to fabricate items. Each item type has its own recipe and time requirements, an item's recipe often includes several different components, and components are themselves items with their own recipes and processing requirements, often nesting several layers deep. Because of this, understanding the actual infrastructure and material costs of manufacturing a particular item can be a complex and time-consuming series of calculations. This app exists to automate every form of this process, allowing the player to focus on strategy.
